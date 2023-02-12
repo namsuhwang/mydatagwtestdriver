@@ -1,5 +1,8 @@
 package com.albee.mydatagwtestdriver.common;
 
+import com.albee.mydatagwtestdriver.api.common.trans.models.dto.TransRequestConsent;
+import com.albee.mydatagwtestdriver.api.common.trans.models.dto.TransTargetInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.security.KeyFactory;
@@ -10,6 +13,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +56,13 @@ public class CommUtil {
         return result;
     }
 
+
+    // 현재 월 String 6 자리로 반환
+    public static String getCurrentDate6(){
+        Date date_now = new Date(System.currentTimeMillis()); // 현재시간을 가져와 Date형으로 저장한다.
+        SimpleDateFormat fourteen_format = new SimpleDateFormat("yyyyMM");
+        return fourteen_format.format(date_now);
+    }
 
     // 현재 일자를 String 8 자리로 반환
     public static String getCurrentDate8(){
@@ -113,5 +124,67 @@ public class CommUtil {
         }
 
         return privateKey;
+    }
+
+    /*
+        scope로 업권유형 조회
+     */
+    public static String getIdstTypeByScope(String scope){
+        if(isNullEmpty(scope)){
+            return scope;
+        }
+
+        String idstType = null;
+        switch(scope.split(".")[0].toUpperCase()){
+            case "BANK" : idstType = "BANK"; break;
+            case "CARD" : idstType = "CARD"; break;
+            case "INSU" : idstType = "INSU"; break;
+            case "INVEST" : idstType = "INVT"; break;
+            case "EFIN" : idstType = "ELEC"; break;
+            case "GINSU" : idstType = "GURT"; break;
+            case "TELECOM" : idstType = "TELE"; break;
+            case "P2P" : idstType = "P2P"; break;
+            case "BOND" : idstType = "BOND"; break;
+            case "CAPTITAL" : idstType = "ITFN"; break;
+            default: idstType = null; break;
+        }
+
+        return idstType;
+    }
+
+    /*
+        consent(전송요구내역) 에서 scope 목록을 스트링으로 추출
+     */
+    public static String getStringScopeList(List<String> scopeList){
+        String scopeString = "";
+
+        for(String s : scopeList){
+            scopeString = scopeString + " " + s;
+        }
+
+        return scopeString.trim();
+    }
+
+    /*
+        consent(전송요구내역) 에서 scope 목록을 List 로 추출
+     */
+    public static List<String> getScopeList(String consent){
+        List<String> scopeList = new ArrayList<>();
+        TransRequestConsent trc = (new ObjectMapper()).convertValue(consent, TransRequestConsent.class);
+
+        // xxx.list scope 가 가장 먼저 추출되도록 for 2번 실행
+        for(TransTargetInfo tti : trc.getTargetInfo()){
+            if(tti.getScope().toLowerCase().contains(".list")){
+                scopeList.add(tti.getScope());
+            }
+        }
+
+        for(TransTargetInfo tti : trc.getTargetInfo()){
+            if(!tti.getScope().toLowerCase().contains(".list")){
+                scopeList.add(tti.getScope());
+            }
+        }
+
+        return scopeList;
     }
 }
