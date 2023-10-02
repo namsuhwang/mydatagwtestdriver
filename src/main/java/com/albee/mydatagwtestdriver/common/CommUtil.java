@@ -1,7 +1,7 @@
 package com.albee.mydatagwtestdriver.common;
 
-import com.albee.mydatagwtestdriver.api.common.trans.models.dto.TransRequestConsent;
-import com.albee.mydatagwtestdriver.api.common.trans.models.dto.TransTargetInfo;
+import com.albee.mydatagwtestdriver.api.common.potal.dto.TransRequestConsent;
+import com.albee.mydatagwtestdriver.api.common.potal.dto.TransTargetInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 

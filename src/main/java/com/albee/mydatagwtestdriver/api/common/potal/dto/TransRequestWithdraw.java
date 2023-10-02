@@ -1,4 +1,4 @@
-package com.albee.mydatagwtestdriver.api.common.trans.models.dto;
+package com.albee.mydatagwtestdriver.api.common.potal.dto;
 
  
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

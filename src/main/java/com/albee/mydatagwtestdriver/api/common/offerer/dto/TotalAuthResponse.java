@@ -1,4 +1,4 @@
-package com.albee.mydatagwtestdriver.api.common.auth.models.dto;
+package com.albee.mydatagwtestdriver.api.common.offerer.dto;
 
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
